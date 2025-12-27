@@ -1,19 +1,12 @@
 package com.example.extractor.agent;
 
 import akka.javasdk.agent.Agent;
-import akka.javasdk.annotations.Component;
-
-import java.nio.file.Path;
-import java.util.List;
 
 /**
- * Akka Java SDK Agent for multi-file extraction.
- * This agent uses the latest Akka Java SDK Agent component to handle
- * document extraction from multiple files with built-in session memory
- * and declarative lifecycle management.
+ * Abstract base class for extraction agents.
+ * Contains common logic for extraction and health checks.
  */
-@Component(id = "extraction-agent")
-public class ExtractionAgent extends Agent {
+public abstract class BaseExtractionAgent extends Agent {
 
     /**
      * Extract JSON data from multiple files.
@@ -33,9 +26,10 @@ public class ExtractionAgent extends Agent {
         fullPrompt.append("\n").append(request.prompt);
 
         return effects()
-            .systemMessage("You are a document extraction agent. Your task is to extract structured data from documents and return it as valid JSON.")
-            .userMessage(fullPrompt.toString())
-            .thenReply();
+                .systemMessage(
+                        "You are a document extraction agent. Your task is to extract structured data from documents and return it as valid JSON.")
+                .userMessage(fullPrompt.toString())
+                .thenReply();
     }
 
     /**
@@ -45,8 +39,8 @@ public class ExtractionAgent extends Agent {
      */
     public Effect<String> healthCheck() {
         return effects()
-            .systemMessage("You are a helpful assistant.")
-            .userMessage("Respond with 'ok' if you are ready to process extraction requests.")
-            .thenReply();
+                .systemMessage("You are a helpful assistant.")
+                .userMessage("Respond with 'ok' if you are ready to process extraction requests.")
+                .thenReply();
     }
 }
